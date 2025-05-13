@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/317DAAE8-349B-476D-B177-3558FF10FC9C.ico" type="image/x-icon">
+    <title>Login Admin - LopezStore</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 350px;
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 80%;
+            padding: 8px;
+            margin: 12px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+        .btn-submit {
+            width: 80%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Estilos para responsividad */
+        @media (max-width: 768px) {
+            .logo {
+                width: 150px;
+            }
+            h2 {
+                font-size: 20px;
+                margin-bottom: 15px;
+            }
+            .input-field {
+                padding: 10px;
+                font-size: 13px;
+            }
+            .btn-submit {
+                padding: 10px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            .logo {
+                width: 150px;
+                margin-bottom: 15px;
+            }
+            h2 {
+                font-size: 18px;
+                margin-bottom: 15px;
+            }
+            .input-field {
+                padding: 10px;
+                font-size: 12px;
+            }
+            .btn-submit {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="img/IMG_0314.png" alt="Logo" class="logo"> <!-- Logo agregado -->
+    <h2>Login Admin</h2>
+    <form id="loginForm">
+        <div>
+            <input type="text" id="username" class="input-field" placeholder="Nombre de usuario" required>
+        </div>
+        <div>
+            <input type="password" id="password" class="input-field" placeholder="Contraseña" required>
+        </div>
+        <div>
+            <button type="submit" class="btn-submit">Iniciar sesión</button>
+        </div>
+        <div id="errorMessage" class="error-message"></div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Guardamos el token en el almacenamiento local o cookies
+            localStorage.setItem('adminToken', data.token);
+            window.location.href = 'adminDashboard.html';  // Redirigir al panel de admin
+        } else {
+            // Mostramos el mensaje de error si el login falla
+            document.getElementById('errorMessage').textContent = data.message || 'Error al iniciar sesión. Intenta nuevamente.';
+        }
+    });
+</script>
+
+</body>
+</html>

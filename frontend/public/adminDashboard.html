@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="img/317DAAE8-349B-476D-B177-3558FF10FC9C.ico" type="image/x-icon">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <title>Panel de Administración - Productos</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f8fc;
+      color: #0E3A65;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    header {
+      background-color: #ffffff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+  
+    header img {
+      max-width: 180px;
+      height: auto;
+    }
+  
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+  
+    .title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+  
+    /* Producto */
+    .product-card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      flex-grow: 1;
+    }
+  
+    .product-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 100%;
+      height: 540px;
+      max-width: 280px;
+      margin: 0 auto;
+      transition: transform 0.3s;
+      padding: 15px;
+      display: flex;
+      text-align: center;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+  
+    .product-card img {
+      width: 248px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  
+    .product-info {
+      font-size: 1em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+  
+    .product-card h3 {
+      font-size: 1.5em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+  
+    .product-info p {
+      font-size: 1em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+  
+    .product-info .price {
+      font-weight: bold;
+      color: #333;
+    }
+  
+    .product-info .sizes {
+      color: #888;
+    }
+  
+    .product-info .category {
+      font-size: 14px;
+      color: #555;
+    }
+  
+    .product-actions {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px 15px;
+    }
+  
+    .edit-btn,
+    .delete-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+    }
+  
+    .edit-btn {
+      background-color: #007bff;
+    }
+  
+    .delete-btn {
+      background-color: #dc3545;
+    }
+  
+    .edit-btn:hover,
+    .delete-btn:hover {
+      opacity: 0.85;
+    }
+  
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+  
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  
+    .close-btn {
+      background-color: #dc3545;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      float: right;
+    }
+  
+    .modal form input,
+    .modal form textarea,
+    .modal form select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      color: #333;
+    }
+  
+    .modal form button[type="submit"] {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  
+    .modal form button[type="submit"]:hover {
+      opacity: 0.9;
+    }
+  
+    .modal label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .modal h2 {
+      color: #333;
+    }
+  
+    #filters-btn {
+    background-color: transparent;
+    color: #0E3A65;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  #filters-btn:hover {
+    color: #1E5DAA;
+  }
+
+
+  .admin-btn {
+    background-color: transparent;
+    color: #0E3A65;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    transition: color 0.3s;
+    position: absolute;
+    top: 55px;
+    right: 75px;
+}
+
+.admin-btn:hover{
+  color: #1E5DAA;
+}
+
+  /* Filtros lightbox */
+  .filters-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .filters-overlay .filter-precio{
+      width: 100%;
+      display: flex;
+    }
+
+  .filters {
+      background-color: white;
+      padding: 20px;
+      width: 300px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      animation: slideIn 0.3s ease-in-out;
+    }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(-100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .filters button.close-btn {
+    background-color: transparent;
+    color: #0E3A65;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .filters input, .filters select {
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+    #search-input{
+      width: 92.5%;
+    }
+
+    #category-filter{
+      width: 100%;
+    }
+
+    .filters input[type="number"] {
+      width: calc(50% - 10px);
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .filters input[type="number"]:last-child {
+      margin-right: 0;
+    }
+
+
+
+
+
+
+    .ver_detalles{
+      background-color: #0E3A65;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      display: block;
+      transition: background-color 0.3s ease;
+    }
+
+    #existingSecondaryImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Espacio entre las imágenes */
+  padding-bottom: 10px;
+}
+
+.btn-eliminar-imgSecondary {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+  margin-top: 5px; /* Para darle un pequeño margen superior */
+  display: block;
+  background-color: #dc3545;
+  margin-left: 10px;
+}
+
+  
+
+
+
+
+
+
+
+/* Estilos del loader */
+#loadingSpinner {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 9999;
+}
+
+#loadingSpinner span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+#loadingSpinner::after {
+  content: '';
+  display: block;
+  margin: 10px auto;
+  border: 4px solid #f3f3f3; /* Color gris claro */
+  border-top: 4px solid #3498db; /* Color azul para el spinner */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+/* Animación para el spinner */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
+
+footer {
+      background-color: #0E3A65;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    footer p {
+      font-size: 1em;
+    }
+
+
+
+
+
+
+  /* Responsividad */
+  @media screen and (max-width: 768px) {
+    header img {
+      max-width: 150px;
+    }
+
+    #filters-btn {
+      font-size: 2em;
+    }
+
+    .admin-btn{
+      font-size: 2em;
+      top: 45px;
+    }
+
+
+    #search-input{
+      width: 92.5%;
+    }
+
+    #category-filter{
+      width: 100%;
+    }
+
+
+
+
+  }
+
+  @media screen and (max-width: 480px) {
+    header img {
+      max-width: 120px;
+    }
+
+    #filters-btn {
+      font-size: 1.5em;
+    }
+
+    .admin-btn {
+      font-size: 1.5em;
+      top: 40px;
+    }
+
+    #search-input{
+      width: 92.5%;
+    }
+
+    #category-filter{
+      width: 100%;
+    }
+  }
+
+
+
+
+
+
+  
+    /* Responsividad */
+    @media (min-width: 768px) {
+      .product-card {
+        width: calc(50% - 20px);
+      }
+    }
+  
+    @media (min-width: 1200px) {
+      .product-card {
+        width: calc(33.33% - 20px);
+      }
+    }
+  
+    @media screen and (max-width: 768px) {
+      .product-card {
+        width: 100%;
+      }
+
+     
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+<header id="main-header">
+  <img src="img/IMG_0314.png" alt="Lopez Store">
+  <button id="filters-btn"><i class="fas fa-filter"></i></button>
+
+  <a href="/admin" class="admin-btn">
+    <i class="fas fa-plus"></i>
+  </a>
+</header>
+
+
+<!-- Filtros con efecto lightbox -->
+ <div class="filters-overlay" id="filters-overlay">
+  <div class="filters">
+    <button class="close-btn" id="close-filters"><i class="fas fa-times"></i></button>
+    <br><br>
+    <input type="text" id="search-input" placeholder="Buscar por nombre...">
+    <select id="category-filter">
+      <option value="todos">Todas las categorías</option>
+      <option value="gorras">Gorras</option>
+      <option value="poloche">Camisetas</option>
+      <option value="pantalones">Pantalones</option>
+      <option value="tenis">Tenis</option>
+    </select>
+    <div class="filter-precio">
+      <input type="number" id="min-price" placeholder="Precio mínimo" min="0">
+      <input type="number" id="max-price" placeholder="Precio máximo" min="0">
+    </div>
+  </div>
+</div>
+
+
+    <!-- Botón de Administración con ícono de + -->
+<!-- Botón de Administración con solo ícono de + -->
+<a href="/admin" class="admin-btn">
+  <i class="fas fa-plus"></i>
+</a>
+
+
+ 
+  
+
+
+
+
+
+
+
+
+
+
+      <div class="product-card-container " id="product-list">
+        <!-- Productos se cargarán dinámicamente -->
+      </div>
+    
+  
+    <!-- Modal de Edición -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <button class="close-btn" onclick="closeModal()">Cerrar</button>
+        <h2>Editar Producto</h2>
+        <br>
+        <form id="editForm">
+          <label for="editName">Nombre del Producto</label>
+          <input type="text" id="editName" placeholder="Nombre del Producto" required />
+  
+          <label for="editDescription">Descripción del Producto</label>
+          <textarea id="editDescription" placeholder="Descripción del Producto" required></textarea>
+  
+          <label for="editPrice">Precio</label>
+          <input type="number" id="editPrice" placeholder="Precio" required />
+          
+          <label for="editCategory">Categoría</label>
+          <select id="editCategory" required>
+            <option value="tenis">Tenis</option>
+            <option value="poloche">Poloche</option>
+            <option value="pantalones">Pantalones</option>
+            <option value="gorras">Gorras</option>
+          </select>
+          
+          <label for="editQuantity">Cantidad</label>
+          <input type="number" id="editQuantity" placeholder="Cantidad" required />
+          
+          <label for="editImage">Imagen Principal</label>
+          <input type="file" id="editImage" accept="image/*" />
+          
+          <label for="editSecondaryImages">Añadir imágenes Secundarias</label>
+          <input type="file" id="editSecondaryImages" accept="image/*" multiple />
+
+          <label>Imágenes Secundarias Existentes</label>
+          <div id="existingSecondaryImages"></div>
+          
+          <label for="editSizes">Tallas (separadas por coma)</label>
+          <input type="text" id="editSizes" placeholder="Tallas (separadas por coma)" required />
+          
+          <button type="submit">Actualizar Producto</button>
+        </form>
+
+        <!-- Spinner de Carga (invisible por defecto) -->
+    <div id="loadingSpinner" style="display: none; text-align: center;">
+      
+    </div>
+
+    
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+<!-- Modal de mensaje simple -->
+<div id="customMessageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 9999;">
+  <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 300px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+    <p id="customMessageModalMessage" style="color: #333;">Mensaje</p>
+    <button onclick="closeCustomMessageModal()" style="margin-top: 15px; padding: 8px 16px; background-color: #0E3A65; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+  </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div id="customConfirmModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 9999;">
+  <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 300px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+    <p id="customConfirmModalMessage" style="color: #333;">¿Estás seguro?</p>
+    <div style="margin-top: 15px;">
+      <button id="confirmBtn" style="margin-right: 10px; padding: 8px 16px; background-color: #0E3A65; color: white; border: none; border-radius: 5px; cursor: pointer;">Confirmar</button>
+      <button id="cancelBtn" style="padding: 8px 16px; background-color: #999; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<footer>
+  <div style="max-width: 1200px; margin: auto; padding: 20px 10px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+    <div style="display: flex; gap: 15px; font-size: 1.5em;">
+      
+    </div>
+    <p style="font-size: 0.9em;">&copy; 2025 Lopez Store. Todos los derechos reservados.</p>
+    <p style="font-size: 0.8em; color: #ccc;">Desarrollado por Andres Lopez</p>
+  </div>
+</footer>
+
+
+    <script>
+      const productList = document.getElementById('product-list');
+      const editModal = document.getElementById('editModal');
+      const editForm = document.getElementById('editForm');
+  
+      let currentProductId = null;
+
+
+
+      editForm.addEventListener('submit', function(event) {
+  event.preventDefault();  // Prevenir el comportamiento por defecto del formulario (recarga de página)
+  updateProduct(currentProductId);
+});
+
+
+      function editProduct(productId) {
+  currentProductId = productId;
+  fetch(`/api/products/${productId}`)
+    .then(res => res.json())
+    .then(data => {
+      const product = data.product;
+      document.getElementById('editName').value = product.name;
+      document.getElementById('editDescription').value = product.description;
+      document.getElementById('editPrice').value = product.price;
+      document.getElementById('editCategory').value = product.category;
+      document.getElementById('editQuantity').value = product.quantity;
+      document.getElementById('editSizes').value = Array.isArray(product.sizes) ? product.sizes.join(', ') : '';
+
+      // Renderizar imágenes secundarias con opción a eliminar
+      const imagesContainer = document.getElementById('existingSecondaryImages');
+      imagesContainer.innerHTML = '';
+      product.images.secondary.forEach(url => {
+        const imgWrapper = document.createElement('div');
+imgWrapper.innerHTML = `
+  <div style="display: flex; align-items: center;">
+    <img src="${url}" width="100" />
+    <button type="button" class="btn-eliminar-imgSecondary" onclick="removeExistingSecondaryImage('${url}')">Eliminar</button>
+  </div>
+`;
+imagesContainer.appendChild(imgWrapper);
+      });
+
+      // Guardar en un array las imágenes a eliminar
+      window.imagesToRemove = [];
+      window.currentSecondaryImages = product.images.secondary;
+
+      editModal.style.display = 'flex';
+    })
+    .catch(err => console.error(err));
+}
+
+function removeExistingSecondaryImage(url) {
+  if (!window.imagesToRemove.includes(url)) {
+    window.imagesToRemove.push(url);
+  }
+  // Quitar del DOM la imagen
+  document.querySelector(`img[src="${url}"]`).parentElement.remove();
+}
+
+
+
+
+
+
+
+
+
+  
+function updateProduct(productId) {
+  // Mostrar el spinner y deshabilitar el botón
+  document.getElementById('loadingSpinner').style.display = 'block';
+  const updateButton = document.querySelector('#editForm button');
+  updateButton.disabled = true;
+
+  const updatedProduct = {
+    name: document.getElementById('editName').value,
+    description: document.getElementById('editDescription').value,
+    price: document.getElementById('editPrice').value,
+    category: document.getElementById('editCategory').value,
+    quantity: document.getElementById('editQuantity').value,
+    sizes: document.getElementById('editSizes').value.split(',').map(s => s.trim())
+  };
+
+  const formData = new FormData();
+  for (const key in updatedProduct) {
+    if (Array.isArray(updatedProduct[key])) {
+      updatedProduct[key].forEach(val => formData.append(`${key}[]`, val));
+    } else {
+      formData.append(key, updatedProduct[key]);
+    }
+  }
+
+  const imageFile = document.getElementById('editImage').files[0];
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
+  const secondaryImages = document.getElementById('editSecondaryImages').files;
+  for (let i = 0; i < secondaryImages.length; i++) {
+    formData.append('secondaryImages', secondaryImages[i]);
+  }
+
+  // Agregar las imágenes secundarias a eliminar
+  if (window.imagesToRemove?.length) {
+    formData.append('secondaryImagesToRemove', JSON.stringify(window.imagesToRemove));
+  }
+
+  const token = localStorage.getItem('adminToken');
+  if (!token) {
+    alert('No estás autenticado');
+    return;
+  }
+
+  fetch(`/api/products/${productId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: formData
+  })
+  .then(response => {
+    if (!response.ok) {
+      console.error('Error en la respuesta del servidor:', response);
+      throw new Error('Error al actualizar el producto');
+    }
+    return response.json();
+  })
+  .then(data => {
+    showCustomMessageModal('Producto actualizado exitosamente');
+    closeModal();
+    loadProducts();
+  })
+  .catch(error => {
+    console.error('Error al actualizar el producto:', error);
+    showCustomMessageModal('Hubo un error al actualizar el producto');
+  })
+  .finally(() => {
+    // Ocultar el spinner y habilitar el botón de actualización
+    document.getElementById('loadingSpinner').style.display = 'none';
+    updateButton.disabled = false;
+  });
+}
+
+function closeModal() {
+  // Obtener el modal por ID
+  const modal = document.getElementById('editModal');
+  // Cambiar el estilo para ocultarlo
+  modal.style.display = 'none';
+}
+
+
+
+
+
+
+      // Ejemplo básico para cargar productos dinámicamente
+      function loadProducts() {
+  const productList = document.getElementById('product-list');
+  
+  // Mostrar mensaje de carga
+  productList.innerHTML = '<p>Cargando productos...</p>';
+
+  // Cargar productos de la API
+  fetch('/api/products')
+    .then(res => res.json())
+    .then(data => {
+      // Limpiar el mensaje de carga y mostrar los productos
+      productList.innerHTML = ''; // Limpia el mensaje de carga
+
+      // Si no hay productos, mostrar un mensaje adecuado
+      if (data.products.length === 0) {
+        productList.innerHTML = '<p>No se encontraron productos.</p>';
+      } else {
+        // Renderizar los productos
+        data.products.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <img src="${product.images.main}" alt="${product.name}">
+            <div class="product-info">
+              <h3>${product.name}</h3>
+              <p>${product.description}</p>
+              <p class="price">RD$${product.price}</p>
+              <p class="sizes">Tallas: ${product.sizes.join(', ')}</p>
+              <p class="category">Categoría: ${product.category}</p>
+            </div>
+            <div class="product-actions">
+              <button class="edit-btn" onclick="editProduct('${product._id}')">Editar</button>
+              <button class="delete-btn" onclick="deleteProduct('${product._id}')">Eliminar</button>
+            </div>
+            <button class="ver_detalles" onclick="window.location.href = '/product-detail-admin.html?id=${product._id}'">Ver Detalles</button>
+          `;
+          productList.appendChild(card);
+        });
+      }
+    })
+    .catch(err => {
+      // Si hay un error, mostrar un mensaje de error
+      productList.innerHTML = '<p>Error al cargar productos.</p>';
+      console.error(err);
+    });
+}
+
+
+
+
+
+
+
+
+ // Modal de mensaje simple
+function showCustomMessageModal(message) {
+  document.getElementById('customMessageModalMessage').textContent = message;
+  document.getElementById('customMessageModal').style.display = 'flex';
+}
+
+function closeCustomMessageModal() {
+  document.getElementById('customMessageModal').style.display = 'none';
+}
+
+// Modal de confirmación reutilizable con callback seguro y limpio
+function showCustomConfirmModal(message, onConfirm) {
+  document.getElementById('customConfirmModalMessage').textContent = message;
+  document.getElementById('customConfirmModal').style.display = 'flex';
+
+  const confirmBtn = document.getElementById('confirmBtn');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  // Limpiar todos los listeners previos usando clonación (más seguro)
+  const newConfirmBtn = confirmBtn.cloneNode(true);
+  confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+  const newCancelBtn = cancelBtn.cloneNode(true);
+  cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+
+  newConfirmBtn.onclick = function () {
+    closeCustomConfirmModal();
+    if (typeof onConfirm === 'function') onConfirm();
+  };
+
+  newCancelBtn.onclick = function () {
+    closeCustomConfirmModal();
+  };
+}
+
+function closeCustomConfirmModal() {
+  document.getElementById('customConfirmModal').style.display = 'none';
+}
+
+// Función eliminar producto con confirmación previa y token
+function deleteProduct(productId) {
+  showCustomConfirmModal('¿Estás seguro de eliminar este producto?', function () {
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      showCustomMessageModal('No estás autenticado');
+      return;
+    }
+
+    fetch(`/api/products/${productId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('Error al eliminar producto');
+      return res.json();
+    })
+    .then(data => {
+      showCustomMessageModal('Producto eliminado exitosamente');
+      loadProducts();
+    })
+    .catch(err => {
+      console.error(err);
+      showCustomMessageModal('Error al eliminar el producto');
+    });
+  });
+}
+
+// Inicialización al cargar productos
+document.addEventListener('DOMContentLoaded', loadProducts);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      let allProducts = [];
+
+async function fetchProducts() {
+  try {
+    const response = await fetch('/api/products');
+    const data = await response.json();
+
+    if (data.products && data.products.length > 0) {
+      allProducts = data.products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      renderProducts(allProducts);
+    } else {
+      document.getElementById('product-list').innerHTML = '<p>No se encontraron productos.</p>';
+    }
+  } catch (error) {
+    console.error('Error al cargar los productos:', error);
+  }
+}
+
+
+
+
+
+function renderProducts(products) {
+  const productList = document.getElementById('product-list');
+  productList.innerHTML = '';
+
+  if (products.length === 0) {
+    productList.innerHTML = '<p>No se encontraron productos con los filtros seleccionados.</p>';
+    return;
+  }
+  
+  products.forEach((product, index) => {
+    const productCard = document.createElement('div');
+    productCard.classList.add('product-card');
+    productCard.style.animationDelay = `${index * 0.1}s`;
+
+    productCard.innerHTML = `
+      <img src="${product.images.main}" alt="${product.name}">
+                <div class="product-info">
+                  <h3>${product.name}</h3>
+                  <p>${product.description}</p>
+                  <p class="price">RD$${product.price}</p>
+                  <p class="sizes">Tallas: ${product.sizes.join(', ')}</p>
+                  <p class="category">Categoría: ${product.category}</p>
+                </div>
+                <div class="product-actions">
+                  <button class="edit-btn" onclick="editProduct('${product._id}')">Editar</button>
+                  <button class="delete-btn" onclick="deleteProduct('${product._id}')">Eliminar</button>
+                </div>
+      <button class="ver_detalles" onclick="window.location.href = '/product-detail.html?id=${product._id}'">Ver Detalles</button>
+    `;
+
+    productList.appendChild(productCard);
+  });
+}
+
+
+
+
+
+
+
+
+
+
+document.getElementById('search-input').addEventListener('input', filterProducts);
+document.getElementById('category-filter').addEventListener('change', filterProducts);
+document.getElementById('min-price').addEventListener('input', filterProducts);
+document.getElementById('max-price').addEventListener('input', filterProducts);
+
+function filterProducts() {
+  const searchText = document.getElementById('search-input').value.toLowerCase();
+  const selectedCategory = document.getElementById('category-filter').value;
+  const minPrice = parseFloat(document.getElementById('min-price').value) || 0;
+  const maxPrice = parseFloat(document.getElementById('max-price').value) || Infinity;
+
+  const filteredProducts = allProducts.filter(product => {
+    const matchName = product.name.toLowerCase().includes(searchText);
+    const matchCategory = selectedCategory === 'todos' || product.category.toLowerCase() === selectedCategory;
+    const matchPrice = product.price >= minPrice && product.price <= maxPrice;
+
+    return matchName && matchCategory && matchPrice;
+  });
+
+  renderProducts(filteredProducts);
+}
+
+// Mostrar el panel de filtros
+document.getElementById('filters-btn').addEventListener('click', () => {
+  document.getElementById('filters-overlay').style.display = 'flex';
+});
+
+// Cerrar el panel de filtros
+document.getElementById('close-filters').addEventListener('click', () => {
+  document.getElementById('filters-overlay').style.display = 'none';
+});
+
+// Cargar los productos cuando la página se cargue
+fetchProducts();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function showCustomModal(message) {
+  document.getElementById('customModalMessage').innerText = message;
+  document.getElementById('customModal').style.display = 'flex';
+}
+
+function closeCustomModal() {
+  document.getElementById('customModal').style.display = 'none';
+}
+
+
+    </script>
+  </body>
+  </html>

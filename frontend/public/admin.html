@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="img/317DAAE8-349B-476D-B177-3558FF10FC9C.ico" type="image/x-icon">
+  <title>Subir producto</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    form h2 {
+      margin-top: 0;
+      color: #444;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 1rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    #sizesSelect {
+      height: 100px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      background-color: #007bff;
+      color: #fff;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: #007bff;
+  color: #fff;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+#backButton:hover {
+  background-color: #0056b3;
+}
+
+    #sizes-section {
+      margin-top: 20px;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #007bff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      form {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <br><br>
+  <h1>Subir nuevo producto</h1>
+
+  <form id="productForm" method="POST" enctype="multipart/form-data">
+    <h2>Agregar Producto</h2>
+
+    <!-- Nombre del producto -->
+    <label for="name">Nombre del Producto:</label>
+    <input type="text" id="name" name="name" required><br>
+
+    <!-- Descripción -->
+    <label for="description">Descripción:</label>
+    <textarea id="description" name="description" required></textarea><br>
+
+    <!-- Precio -->
+    <label for="price">Precio:</label>
+    <input type="number" id="price" name="price" required><br>
+
+    <!-- Categoría -->
+    <label for="category">Categoría:</label>
+    <select id="category" name="category" required>
+      <option value="">-- Selecciona una categoría --</option>
+      <option value="tenis">Tenis</option>
+      <option value="poloche">Poloche (Camisetas)</option>
+      <option value="pantalones">Pantalones</option>
+      <option value="gorras">Gorras</option>
+    </select><br>
+
+    <!-- Cantidad disponible -->
+    <label for="quantity">Cantidad Disponible:</label>
+    <input type="number" id="quantity" name="quantity" required><br>
+
+    <!-- Tallas -->
+    <div id="sizes-section" style="display:none;">
+      <label for="sizesText">Tallas:</label>
+      <input type="text" id="sizesText" placeholder="Ejemplo: 8, 9.5, 10"><br>
+      <select id="sizesSelect" multiple style="display: none;">
+        <option value="S">S</option>
+        <option value="M">M</option>
+        <option value="L">L</option>
+        <option value="XL">XL</option>
+        <option value="XXL">XXL</option>
+      </select>
+    </div>
+
+    <!-- Imágenes -->
+    <label for="image">Imagen Principal:</label>
+    <input type="file" id="image" name="image" accept="image/*" required><br>
+
+    <label for="secondaryImages">Imágenes Secundarias (opcional):</label>
+    <input type="file" id="secondaryImages" name="secondaryImages" accept="image/*" multiple><br>
+
+    <!-- Botón de agregar producto -->
+    <button type="submit">Agregar Producto</button>
+  </form>
+
+  <!-- Botón pequeño para regresar al panel de administración -->
+<a href="adminDashboard.html" id="backButton">Volver al Panel</a>
+
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+
+
+
+
+
+
+<!-- Modal de mensaje simple -->
+<div id="customMessageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 9999;">
+  <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; max-width: 300px; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+    <p id="customMessageModalMessage">Mensaje</p>
+    <button onclick="closeCustomMessageModal()" style="margin-top: 15px; padding: 8px 16px; background-color: #0E3A65; color: white; border: none; border-radius: 5px; cursor: pointer;">Cerrar</button>
+  </div>
+</div>
+
+
+
+
+  <script>
+    const productForm = document.getElementById('productForm');
+    const categorySelect = document.getElementById('category');
+    const sizesSection = document.getElementById('sizes-section');
+    const sizesText = document.getElementById('sizesText');
+    const sizesSelect = document.getElementById('sizesSelect');
+
+    // Mostrar el campo correcto de tallas según la categoría
+    categorySelect.addEventListener('change', () => {
+      const category = categorySelect.value;
+
+      if (category === 'tenis' || category === 'pantalones') {
+        sizesSection.style.display = 'block';
+        sizesText.style.display = 'inline';
+        sizesText.disabled = false;
+        sizesSelect.style.display = 'none';
+        sizesSelect.disabled = true;
+      } else if (category === 'poloche') {
+        sizesSection.style.display = 'block';
+        sizesSelect.style.display = 'inline';
+        sizesSelect.disabled = false;
+        sizesText.style.display = 'none';
+        sizesText.disabled = true;
+      } else {
+        sizesSection.style.display = 'none';
+        sizesText.disabled = true;
+        sizesSelect.disabled = true;
+      }
+    });
+
+
+
+
+    productForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Mostrar el loader durante la operación de carga
+  loader.style.display = 'flex';  // Mostrar loader
+
+  const formData = new FormData(productForm);
+  const category = categorySelect.value;
+
+  let sizes = [];
+
+  if (category === 'tenis' || category === 'pantalones') {
+    const sizesValue = sizesText.value.trim();
+    sizes = sizesValue ? sizesValue.split(',').map(s => s.trim()) : [];
+  } else if (category === 'poloche') {
+    sizes = Array.from(sizesSelect.selectedOptions).map(option => option.value);
+  }
+
+  formData.append('sizes', JSON.stringify(sizes));
+
+  const token = localStorage.getItem('adminToken');
+
+  try {
+    const response = await fetch('/api/products', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      window.location.href = 'adminDashboard.html'; // Redirigir
+    } else {
+      showCustomMessageModal('Error al agregar producto: ' + data.message);
+    }
+  } catch (error) {
+    console.error('Error al enviar formulario:', error);
+    alert('Hubo un error al enviar el formulario.');
+  } finally {
+    loader.style.display = 'none'; // Ocultar loader al final
+  }
+});
+
+
+
+
+
+
+
+
+
+
+ // Modal de mensaje simple
+ function showCustomMessageModal(message) {
+  document.getElementById('customMessageModalMessage').textContent = message;
+  document.getElementById('customMessageModal').style.display = 'flex';
+}
+
+function closeCustomMessageModal() {
+  document.getElementById('customMessageModal').style.display = 'none';
+}
+  </script>
+</body>
+</html>

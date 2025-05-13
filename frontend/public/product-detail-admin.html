@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="img/317DAAE8-349B-476D-B177-3558FF10FC9C.ico" type="image/x-icon">
+  <title>Detalles del Producto</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .back-btn {
+      display: block;
+      margin: 20px auto 0 auto;
+      background-color: #0E3A65; /* Color primario */
+      color: white;
+      padding: 12px 25px;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      width: fit-content;
+      font-size: 1.2em;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+  
+    .back-btn:hover {
+      background-color: #1E5DAA; /* Hover */
+      transform: scale(1.05);
+    }
+  
+    .product-detail-container {
+      background-color: white; /* Fondo blanco para el contenedor */
+      padding: 20px;
+      max-width: 1200px;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  
+    .product-gallery {
+      flex: 1 1 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .main-image {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      object-fit: cover;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+  
+    .thumbnail-gallery {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+  
+    .thumbnail-gallery img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 5px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border 0.3s ease;
+    }
+  
+    .thumbnail-gallery img:hover {
+      border: 2px solid #0E3A65; /* Hover con color primario */
+    }
+  
+    .product-info {
+      flex: 1 1 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .buy-btn {
+      background-color: #0E3A65; /* Color primario */
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+  
+    .lightbox-content {
+      background-color: white; /* Fondo blanco */
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+    }
+  
+    #image-lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+  
+    #image-lightbox img {
+      object-fit: contain;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+    }
+  
+    .buy-form-lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+  
+    .buy-form-container {
+      background-color: white; /* Fondo blanco */
+      padding: 30px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+    }
+  
+    .buy-form-container h2 {
+      margin: 0 0 15px 0;
+      font-size: 1.5em;
+      text-align: center;
+    }
+  
+    .form-group {
+      margin-bottom: 15px;
+    }
+  
+    .form-group label {
+      font-weight: bold;
+    }
+  
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+  
+    .submit {
+      background-color: #0E3A65; /* Color primario */
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 1.2em;
+    }
+  
+    .submit:hover {
+      background-color: #1E5DAA; /* Hover con color secundario */
+    }
+  
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 2em;
+      cursor: pointer;
+      color: #0E3A65; /* Color primario */
+      border: none;
+      transition: color 0.3s ease;
+    }
+  
+    .close-btn:hover {
+      color: #e74c3c; /* Rojo al hacer hover */
+    }
+  </style>
+  
+</head>
+<body>
+
+<a href="adminDashboard.html" class="back-btn">← Volver a la tienda</a>
+
+<div id="product-detail" class="product-detail-container"></div>
+
+<!-- Formulario de Compra -->
+<div id="buy-form-lightbox" class="buy-form-lightbox">
+  <div class="buy-form-container">
+    <!-- Cambio el texto "X" por un ícono de FontAwesome -->
+    <button class="close-btn" onclick="closeForm()"><i class="fas fa-times"></i></button>
+    <br>
+    <h2>Formulario de compra</h2>
+    <form id="buy-form" onsubmit="submitForm(event)">
+      <div class="form-group">
+        <label for="full-name">Nombre completo</label>
+        <input type="text" id="full-name" name="full-name" required>
+      </div>
+      <div class="form-group">
+        <label for="phone-number">Número de teléfono</label>
+        <input type="tel" id="phone-number" name="phone-number" required>
+      </div>
+      <div class="form-group" id="size-group" style="display:none;">
+        <label for="size">Talla seleccionada</label>
+        <select id="size" name="size"></select>
+      </div>
+      <button type="submit" class="submit">Enviar y Comprar</button>
+    </form>
+  </div>
+</div>
+
+<div id="image-lightbox" class="lightbox" onclick="closeImageLightbox(event)">
+    <img id="lightbox-img" src="" alt="Imagen ampliada">
+</div>
+
+<script>
+  let currentProduct = null;
+
+  async function fetchProductDetails() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+    try {
+      const response = await fetch(`/api/product-detail/${productId}`);
+      const data = await response.json();
+      if (data.product) {
+        currentProduct = data.product;
+        renderProductDetails();
+      } else {
+        document.getElementById('product-detail').innerHTML = '<p>Producto no encontrado.</p>';
+      }
+    } catch (error) {
+      console.error('Error al cargar el detalle del producto:', error);
+    }
+  }
+
+  function renderProductDetails() {
+    let thumbnails = '';
+
+    if (currentProduct.images && Array.isArray(currentProduct.images.secondary) && currentProduct.images.secondary.length > 0) {
+      thumbnails = `
+        <div class="thumbnail-gallery">
+          ${currentProduct.images.secondary.map(img => `
+            <img src="${img}" alt="Miniatura" class="thumbnail-image" onclick="openLightbox('${img}')">
+          `).join('')}
+        </div>
+      `;
+    }
+
+    document.getElementById('product-detail').innerHTML = `
+      <div class="product-gallery">
+        <img id="main-product-image" src="${currentProduct.images?.main || ''}" alt="${currentProduct.name}" class="main-image" onclick="openLightbox('${currentProduct.images?.main || ''}')">
+        ${thumbnails}
+      </div>
+      <div class="product-info">
+        <h2>${currentProduct.name}</h2>
+        <p>${currentProduct.description}</p>
+        <p><strong>Precio:</strong> RD$${currentProduct.price}</p>
+        ${currentProduct.sizes.length > 0 ? `<p><strong>Tallas disponibles:</strong> ${currentProduct.sizes.join(', ')}</p>` : ''}
+      </div>
+    `;
+  }
+
+  function openLightbox(imageUrl) {
+    document.getElementById('image-lightbox').style.display = 'flex';
+    document.getElementById('lightbox-img').src = imageUrl;
+  }
+
+  function closeImageLightbox(event) {
+    if (event.target === event.currentTarget) {
+      document.getElementById('image-lightbox').style.display = 'none';
+    }
+  }
+
+  function showBuyForm() {
+    document.getElementById('buy-form-lightbox').style.display = 'flex';
+    const sizeGroup = document.getElementById('size-group');
+    const sizeSelect = document.getElementById('size');
+    sizeSelect.innerHTML = '';
+
+    if (currentProduct.sizes && currentProduct.sizes.length > 0) {
+      sizeGroup.style.display = 'block';
+      currentProduct.sizes.forEach(size => {
+        const option = document.createElement('option');
+        option.value = size;
+        option.textContent = size;
+        sizeSelect.appendChild(option);
+      });
+    } else {
+      sizeGroup.style.display = 'none';
+    }
+  }
+
+  function closeForm() {
+    document.getElementById('buy-form-lightbox').style.display = 'none';
+  }
+
+  async function submitForm(event) {
+    event.preventDefault();
+
+    const fullName = document.getElementById('full-name').value;
+    const phoneNumber = document.getElementById('phone-number').value;
+    const size = document.getElementById('size').value;
+
+    // Crear el mensaje para WhatsApp
+    const message = `Hola, quiero comprar el ${currentProduct.name}, talla ${size || 'no especificada'}.\nMi nombre es ${fullName}`;
+
+    // Aquí puedes colocar el número de WhatsApp del negocio (sin espacios ni guiones)
+    const businessWhatsAppNumber = '19142792431';
+
+    // Redirigir al usuario a WhatsApp con el mensaje predefinido
+    const whatsappURL = `https://wa.me/${businessWhatsAppNumber}?text=${encodeURIComponent(message)}`;
+
+    // Abrir en una nueva pestaña
+    window.open(whatsappURL, '_blank');
+
+    closeForm(); // Cerrar el formulario después de enviar
+}
+
+
+  window.onload = fetchProductDetails;
+</script>
+</body>
+</html>
