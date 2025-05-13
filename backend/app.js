@@ -42,6 +42,11 @@ app.get('/loginAdmin', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/public/loginAdmin.html'));
 });
 
+// Ruta de carga de productos manual (formulario)
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/public/admin.html'));
+});
+
 
 
 // Middleware de errores
