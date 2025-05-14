@@ -234,14 +234,14 @@
 <form id="buy-form" onsubmit="submitForm(event)">
   <div class="form-group">
     <label for="full-name">Nombre completo</label>
-    <input type="text" id="full-name" name="full-name" required maxlength="100" oninput="validateFullName()"> 
+    <input type="text" id="full-name" name="full-name" required maxlength="100"> 
     <br><br>
     <span id="name-error" style="color: red; display: none;">Debe contener su nombre y su apellido</span>
   </div>
 
   <div class="form-group">
     <label for="phone-number">Número de teléfono</label>
-    <input type="tel" id="phone-number" name="phone-number" required pattern="^\+?[0-9]{10,15}$" oninput="validatePhoneNumber()"> 
+    <input type="tel" id="phone-number" name="phone-number" required pattern="^\+?[0-9]{10,15}$"> 
     <br><br>
     <span id="phone-error" style="color: red; display: none;">Número de teléfono inválido</span>
   </div>
@@ -282,46 +282,41 @@
 <script>
 
 
-// Función para validar el nombre completo
-function validateFullName() {
+let fullNameTouched = false;
+let phoneNumberTouched = false;
+
+function validateForm() {
     const fullName = document.getElementById("full-name").value;
-    const errorMessage = document.getElementById("name-error");
-    const submitButton = document.getElementById("submit-button");
-
-    // Validación: el nombre debe tener al menos dos palabras con más de una letra
-    const isValid = /^[a-zA-Z]{3,}(?: [a-zA-Z]{3,})+$/.test(fullName);
-
-    if (isValid) {
-      errorMessage.style.display = "none";
-      submitButton.disabled = false; // Habilitar el botón de envío
-    } else {
-      errorMessage.style.display = "inline";
-      submitButton.disabled = true; // Deshabilitar el botón de envío
-    }
-  }
-
-
-
-
- // Función para validar el número de teléfono
- function validatePhoneNumber() {
     const phoneNumber = document.getElementById("phone-number").value;
+    const nameError = document.getElementById("name-error");
     const phoneError = document.getElementById("phone-error");
     const submitButton = document.getElementById("submit-button");
 
-    // Validar que el teléfono tenga entre 10 y 15 dígitos
-    const phonePattern = /^\+?[0-9]{10,15}$/;
-    const isPhoneValid = phonePattern.test(phoneNumber);
+    const isNameValid = /^[\p{L}]{3,}(?: [\p{L}]{3,})+$/u.test(fullName);
+    const isPhoneValid = /^\+?[0-9]{10,15}$/.test(phoneNumber);
 
-    if (isPhoneValid) {
-      phoneError.style.display = "none";
-      submitButton.disabled = false; // Habilitar el botón de envío
-    } else {
-      phoneError.style.display = "inline";
-      submitButton.disabled = true; // Deshabilitar el botón de envío
+    // Solo mostrar el error si el campo ya fue tocado
+    if (fullNameTouched) {
+        nameError.style.display = isNameValid ? "none" : "inline";
     }
-  }
 
+    if (phoneNumberTouched) {
+        phoneError.style.display = isPhoneValid ? "none" : "inline";
+    }
+
+    submitButton.disabled = !(isNameValid && isPhoneValid);
+}
+
+// Marcar campo como tocado en focus y validar
+document.getElementById("full-name").addEventListener("focus", () => {
+    fullNameTouched = true;
+});
+document.getElementById("full-name").addEventListener("input", validateForm);
+
+document.getElementById("phone-number").addEventListener("focus", () => {
+    phoneNumberTouched = true;
+});
+document.getElementById("phone-number").addEventListener("input", validateForm);
 
 
 
