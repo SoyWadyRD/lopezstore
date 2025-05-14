@@ -829,8 +829,7 @@ function closeModal() {
 
 
 
-      // Ejemplo básico para cargar productos dinámicamente
-      function loadProducts() {
+function loadProducts() {
   const productList = document.getElementById('product-list');
   
   // Mostrar mensaje de carga
@@ -847,6 +846,12 @@ function closeModal() {
       if (data.products.length === 0) {
         productList.innerHTML = '<p>No se encontraron productos.</p>';
       } else {
+        // Asegurarse de ordenar los productos en el frontend (en caso de que el backend no lo haga)
+        data.products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // Log para ver el orden de los productos
+        console.log('Productos ordenados:', data.products);
+
         // Renderizar los productos
         data.products.forEach(product => {
           const card = document.createElement('div');
@@ -876,7 +881,6 @@ function closeModal() {
       console.error(err);
     });
 }
-
 
 
 
