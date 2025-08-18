@@ -90,7 +90,7 @@
 
             try {
                 // Enviar los datos al backend
-                const response = await fetch('/api/auth/create-admin', {
+                const response = await fetch('http://localhost:5000/api/auth/create-admin', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
