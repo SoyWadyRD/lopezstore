@@ -52,33 +52,27 @@
     /* Producto */
     .product-card-container {
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding: 20px;
     }
   
   .product-card {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   width: 100%;
-  max-width: 130px; /* 2 en 2 en mobile */
-  margin: 0 auto;
-  transition: transform 0.3s;
+  max-width: 160px;   /* un poco más ancho en móviles */
   padding: 10px;
+  text-align: center;
   display: flex;
   flex-direction: column;
-  text-align: center;
-  height: 460px; /* todas iguales */
+  justify-content: space-between;
+  overflow: hidden;
 }
   
-    .product-card:hover {
-      transform: translateY(-5px);
-    }
+    
   
     .product-card img {
       width: 100%;

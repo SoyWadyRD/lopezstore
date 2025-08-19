@@ -116,7 +116,7 @@
       margin-right: 0;
     }
 
-    .products-container {
+.products-container {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -124,22 +124,19 @@
   padding: 20px;
 }
 
-    /* === TARJETA === */
+/* === TARJETA === */
 .product-card {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 100%;
-  max-width: 130px;   /* Igual que admin para que sean 2 en 2 */
+  max-width: 160px;   /* un poco más ancho en móviles */
   padding: 10px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeInUp 0.8s forwards;
 }
 
     @keyframes fadeInUp {
@@ -225,6 +222,18 @@
         font-size: 1.5em;
       }
     }
+
+
+
+
+
+
+
+
+
+
+
+    
   </style>
 </head>
 <body>
