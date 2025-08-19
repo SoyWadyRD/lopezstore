@@ -167,6 +167,7 @@
       <option value="poloche">Poloche (Camisetas)</option>
       <option value="pantalones">Pantalones</option>
       <option value="gorras">Gorras</option>
+      <option value="sandalias">Sandalias</option>
     </select><br>
 
     <!-- Cantidad disponible -->
@@ -232,26 +233,27 @@
 
     // Mostrar el campo correcto de tallas según la categoría
     categorySelect.addEventListener('change', () => {
-      const category = categorySelect.value;
+  const category = categorySelect.value;
 
-      if (category === 'tenis' || category === 'pantalones') {
-        sizesSection.style.display = 'block';
-        sizesText.style.display = 'inline';
-        sizesText.disabled = false;
-        sizesSelect.style.display = 'none';
-        sizesSelect.disabled = true;
-      } else if (category === 'poloche') {
-        sizesSection.style.display = 'block';
-        sizesSelect.style.display = 'inline';
-        sizesSelect.disabled = false;
-        sizesText.style.display = 'none';
-        sizesText.disabled = true;
-      } else {
-        sizesSection.style.display = 'none';
-        sizesText.disabled = true;
-        sizesSelect.disabled = true;
-      }
-    });
+  if (category === 'tenis' || category === 'pantalones' || category === 'sandalias') {
+    sizesSection.style.display = 'block';
+    sizesText.style.display = 'inline';
+    sizesText.disabled = false;
+    sizesSelect.style.display = 'none';
+    sizesSelect.disabled = true;
+  } else if (category === 'poloche') {
+    sizesSection.style.display = 'block';
+    sizesSelect.style.display = 'inline';
+    sizesSelect.disabled = false;
+    sizesText.style.display = 'none';
+    sizesText.disabled = true;
+  } else {
+    sizesSection.style.display = 'none';
+    sizesText.disabled = true;
+    sizesSelect.disabled = true;
+  }
+});
+
 
 
 
@@ -267,12 +269,12 @@
 
   let sizes = [];
 
-  if (category === 'tenis' || category === 'pantalones') {
-    const sizesValue = sizesText.value.trim();
-    sizes = sizesValue ? sizesValue.split(',').map(s => s.trim()) : [];
-  } else if (category === 'poloche') {
-    sizes = Array.from(sizesSelect.selectedOptions).map(option => option.value);
-  }
+if (category === 'tenis' || category === 'pantalones' || category === 'sandalias') {
+  const sizesValue = sizesText.value.trim();
+  sizes = sizesValue ? sizesValue.split(',').map(s => s.trim()) : [];
+} else if (category === 'poloche') {
+  sizes = Array.from(sizesSelect.selectedOptions).map(option => option.value);
+}
 
   formData.append('sizes', JSON.stringify(sizes));
 

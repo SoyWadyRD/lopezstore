@@ -48,7 +48,7 @@ const createProduct = async (req, res) => {
       price,
       category,
       quantity,
-      sizes: ['tenis', 'poloche', 'pantalones'].includes(category) ? JSON.parse(sizes) : [], // Solo guardar tallas si corresponde
+      sizes: ['tenis', 'poloche', 'pantalones', 'sandalias'].includes(category) ? JSON.parse(sizes) : [], // Solo guardar tallas si corresponde
       images: {
         main: uploadedMainImage.secure_url,
         secondary: uploadedSecondaryImages,

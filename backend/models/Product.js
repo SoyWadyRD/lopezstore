@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ['tenis', 'poloche', 'pantalones', 'gorras'], // Definir las categorías permitidas
+    enum: ['tenis', 'poloche', 'pantalones', 'gorras', 'sandalias'], // Definir las categorías permitidas
   },
   quantity: {
     type: Number,
