@@ -60,48 +60,57 @@
       flex-grow: 1;
     }
   
-    .product-card {
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      width: 100%;
-      height: 540px;
-      max-width: 280px;
-      margin: 0 auto;
-      transition: transform 0.3s;
-      padding: 15px;
-      display: flex;
-      text-align: center;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+  .product-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 100%;
+  max-width: 130px; /* 2 en 2 en mobile */
+  margin: 0 auto;
+  transition: transform 0.3s;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 460px; /* todas iguales */
+}
   
     .product-card:hover {
       transform: translateY(-5px);
     }
   
     .product-card img {
-      width: 248px;
-      height: 200px;
+      width: 100%;
+      height: 120px;
       object-fit: cover;
       border-radius: 8px;
     }
   
-    .product-info {
-      font-size: 1em;
-      color: #333;
-      margin-bottom: 10px;
-    }
+   /* Ocupa el espacio libre y mantiene proporción */
+.product-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* texto arriba */
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
   
-    .product-card h3 {
-      font-size: 1.5em;
-      color: #333;
-      margin-bottom: 10px;
-    }
+   .product-card h3 {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  line-height: 1.2;
+  height: 36px;            /* Fija altura de título */
+  overflow: hidden;        /* Evita desbordes */
+  text-overflow: ellipsis; /* Corta con "..." si es muy largo */
+}
   
     .product-info p {
-      font-size: 1em;
+      font-size: 15px;
       color: #333;
       margin-bottom: 10px;
     }
@@ -120,21 +129,23 @@
       color: #555;
     }
   
-    .product-actions {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 15px 15px;
-    }
+   /* Botones siempre al fondo */
+.product-actions {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
   
     .edit-btn,
-    .delete-btn {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      color: white;
-    }
+.delete-btn {
+  padding: 6px 10px; /* más pequeños para encajar en 130px */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  color: white;
+}
   
     .edit-btn {
       background-color: #007bff;
